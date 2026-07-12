@@ -1,0 +1,567 @@
+---
+/** The home hero: one scene, three scenarios. Switching a mode shifts the scene's
+    light temperature, the phone UI, the input/result plates and the copy — a single
+    composition transforming, not a page of sections (docs/MOVA_DESIGN.md §1).
+    Interaction: tablist (click / arrow keys / tap); reduced-motion collapses all
+    transitions to instant swaps via --dur-* tokens. */
+import { features } from '../data/features';
+import { withBase } from '../data/site';
+import InteractivePhone from './InteractivePhone.astro';
+
+const defaultMode = features[0].id;
+---
+
+<section class="hero" data-mode={defaultMode}>
+  <div class="light" aria-hidden="true">
+    {features.map((f) => <span class="layer" data-for={f.id}></span>)}
+  </div>
+
+  <div class="container inner">
+    <div class="copy">
+      <p class="type-label eyebrow">Motion · Opportunity · Visual AI</p>
+
+      <h1>
+        Your photo,
+        <span class="swap headline-swap">
+          {features.map((f) => (
+            <span class="swap-item" data-for={f.id}>{f.headline}</span>
+          ))}
+        </span>
+      </h1>
+
+      <div
+        class="swap pitch-swap"
+        role="tabpanel"
+        id="hero-panel"
+        aria-labelledby={`tab-${defaultMode}`}
+      >
+        {features.map((f) => (
+          <p class="swap-item" data-for={f.id}>{f.pitch}</p>
+        ))}
+      </div>
+
+      <div class="switcher glass-1" role="tablist" aria-label="MOVA scenarios">
+        {features.map((f) => (
+          <button
+            type="button"
+            role="tab"
+            id={`tab-${f.id}`}
+            aria-selected={f.id === defaultMode ? 'true' : 'false'}
+            aria-controls="hero-panel"
+            tabindex={f.id === defaultMode ? 0 : -1}
+            data-mode-target={f.id}
+          >
+            <span class="dot" aria-hidden="true"></span>
+            {f.name}
+          </button>
+        ))}
+      </div>
+
+      <div class="cta-row">
+        <a class="cta-primary" href={withBase('/download')}>Download for iPhone</a>
+        <a class="cta-ghost" href="#why">Why MOVA</a>
+      </div>
+    </div>
+
+    <div class="stage" aria-hidden="true">
+      <div class="beam">
+        {features.map((f) => <span class="layer" data-for={f.id}></span>)}
+      </div>
+
+      <div class="plate input">
+        <div class="plate-media">
+          {features.map((f) => (
+            <span class="swap-item plate-view" data-for={f.id}>
+              {f.id === 'baby' && (
+                <svg viewBox="0 0 140 100">
+                  <g class="soft">
+                    <circle cx="48" cy="34" r="16" />
+                    <path d="M18 92 C18 66 32 58 48 58 C64 58 78 66 78 92 Z" />
+                  </g>
+                  <g class="soft dim">
+                    <circle cx="96" cy="38" r="15" />
+                    <path d="M68 92 C68 68 81 61 96 61 C111 61 124 68 124 92 Z" />
+                  </g>
+                </svg>
+              )}
+              {f.id === 'trends' && (
+                <svg viewBox="0 0 140 100">
+                  <g class="soft">
+                    <circle cx="70" cy="34" r="17" />
+                    <path d="M38 94 C38 66 52 58 70 58 C88 58 102 66 102 94 Z" />
+                  </g>
+                </svg>
+              )}
+              {f.id === 'motion' && (
+                <svg viewBox="0 0 140 100">
+                  <g class="soft">
+                    <circle cx="52" cy="34" r="16" />
+                    <path d="M24 92 C24 66 37 58 52 58 C67 58 82 66 82 92 Z" />
+                  </g>
+                  <g class="frame-glyph">
+                    <rect x="92" y="30" width="34" height="52" rx="7" fill="none" />
+                    <path d="M103 48 L117 56 L103 64 Z" />
+                  </g>
+                </svg>
+              )}
+            </span>
+          ))}
+        </div>
+        <span class="plate-label swap">
+          {features.map((f) => (
+            <span class="swap-item" data-for={f.id}>{f.input}</span>
+          ))}
+        </span>
+      </div>
+
+      <InteractivePhone />
+
+      <div class="plate output">
+        <div class="plate-media">
+          {features.map((f) => (
+            <span class="swap-item plate-view" data-for={f.id}>
+              {f.id === 'baby' && (
+                <svg viewBox="0 0 140 100">
+                  <g class="lit">
+                    <circle cx="70" cy="36" r="21" />
+                    <path d="M40 96 C40 72 53 64 70 64 C87 64 100 72 100 96 Z" />
+                  </g>
+                </svg>
+              )}
+              {f.id === 'trends' && (
+                <svg viewBox="0 0 140 100">
+                  <rect class="frame-lit" x="48" y="8" width="44" height="84" rx="9" fill="none" />
+                  <path class="lit" d="M63 40 L82 50 L63 60 Z" />
+                </svg>
+              )}
+              {f.id === 'motion' && (
+                <svg viewBox="0 0 140 100">
+                  <path class="trail-path" d="M16 84 C44 38 82 30 128 52" fill="none" />
+                  <g class="lit dim2">
+                    <circle cx="36" cy="66" r="8" />
+                    <path d="M26 92 C26 80 31 75 36 75 C41 75 46 80 46 92 Z" />
+                  </g>
+                  <g class="lit dim1">
+                    <circle cx="74" cy="50" r="9" />
+                    <path d="M62 82 C62 68 67 62 74 62 C81 62 86 68 86 82 Z" />
+                  </g>
+                  <g class="lit">
+                    <circle cx="114" cy="48" r="10" />
+                    <path d="M100 86 C100 70 106 62 114 62 C122 62 128 70 128 86 Z" />
+                  </g>
+                </svg>
+              )}
+            </span>
+          ))}
+        </div>
+        <span class="plate-label swap">
+          {features.map((f) => (
+            <span class="swap-item" data-for={f.id}>{f.output}</span>
+          ))}
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    /* header is 64px */
+    min-height: calc(100svh - 64px);
+    display: flex;
+    align-items: center;
+    padding: var(--space-8) 0;
+  }
+
+  .hero[data-mode='baby'] { --mode: var(--mode-baby); }
+  .hero[data-mode='trends'] { --mode: var(--mode-trends); }
+  .hero[data-mode='motion'] { --mode: var(--mode-motion); }
+
+  /* Scene light: one key light top-right whose temperature follows the mode */
+  .light {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .light .layer {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity var(--dur-hero) var(--ease-standard);
+  }
+
+  .light .layer[data-for='baby'] {
+    background:
+      radial-gradient(1000px 640px at 78% -10%, color-mix(in srgb, var(--mode-baby) 15%, transparent), transparent 65%),
+      radial-gradient(700px 500px at -8% 60%, color-mix(in srgb, var(--mode-baby) 6%, transparent), transparent 60%);
+  }
+
+  .light .layer[data-for='trends'] {
+    background:
+      radial-gradient(1000px 640px at 78% -10%, color-mix(in srgb, var(--mode-trends) 14%, transparent), transparent 65%),
+      radial-gradient(700px 500px at -8% 60%, color-mix(in srgb, var(--mode-trends) 6%, transparent), transparent 60%);
+  }
+
+  .light .layer[data-for='motion'] {
+    background:
+      radial-gradient(1000px 640px at 78% -10%, color-mix(in srgb, var(--mode-motion) 16%, transparent), transparent 65%),
+      radial-gradient(700px 500px at -8% 60%, color-mix(in srgb, var(--mode-motion) 7%, transparent), transparent 60%);
+  }
+
+  [data-mode='baby'] .light .layer[data-for='baby'],
+  [data-mode='trends'] .light .layer[data-for='trends'],
+  [data-mode='motion'] .light .layer[data-for='motion'] {
+    opacity: 1;
+  }
+
+  .inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 480px) 1fr;
+    gap: var(--space-7);
+    align-items: center;
+    width: 100%;
+  }
+
+  /* Copy column */
+  .eyebrow {
+    margin-bottom: var(--space-5);
+  }
+
+  h1 {
+    /* Narrower than --type-display: the longest mode line must fit the copy column */
+    font-size: clamp(40px, 4.4vw, 64px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.02;
+    margin-bottom: var(--space-5);
+  }
+
+  /* Stacked swap pattern: absolutely positioned variants crossfading in place */
+  .swap {
+    position: relative;
+    display: block;
+  }
+
+  .swap .swap-item {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity var(--dur-scene) var(--ease-standard),
+      transform var(--dur-scene) var(--ease-enter);
+    pointer-events: none;
+  }
+
+  [data-mode='baby'] .swap .swap-item[data-for='baby'],
+  [data-mode='trends'] .swap .swap-item[data-for='trends'],
+  [data-mode='motion'] .swap .swap-item[data-for='motion'] {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--dur-scene) * 0.3);
+    pointer-events: auto;
+  }
+
+  .headline-swap {
+    height: 1.05em;
+    color: color-mix(in srgb, var(--mode) 72%, #fff);
+    transition: color var(--dur-hero) var(--ease-standard);
+  }
+
+  .headline-swap .swap-item {
+    white-space: nowrap;
+  }
+
+  .pitch-swap {
+    min-height: 4.6em;
+    max-width: 42ch;
+    color: var(--text-mid);
+  }
+
+  /* Mode switcher — tablist rail */
+  .switcher {
+    display: inline-flex;
+    gap: var(--space-1);
+    padding: var(--space-1);
+    border-radius: var(--radius-pill);
+    margin-bottom: var(--space-6);
+  }
+
+  .switcher [role='tab'] {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    gap: var(--space-2);
+    padding: 10px 18px;
+    border-radius: var(--radius-pill);
+    font-size: var(--type-small-size);
+    font-weight: 600;
+    color: var(--text-mid);
+    transition:
+      color var(--dur-ui) var(--ease-standard),
+      background-color var(--dur-ui) var(--ease-standard);
+  }
+
+  .switcher [role='tab'] .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: var(--radius-pill);
+    background: var(--text-low);
+    transition: background-color var(--dur-ui) var(--ease-standard),
+      box-shadow var(--dur-ui) var(--ease-standard);
+  }
+
+  .switcher [role='tab']:hover {
+    color: var(--text-hi);
+  }
+
+  .switcher [role='tab'][aria-selected='true'] {
+    color: var(--text-hi);
+    background: rgba(255, 255, 255, 0.09);
+    box-shadow: var(--glass-highlight);
+  }
+
+  .switcher [data-mode-target='baby'][aria-selected='true'] .dot { background: var(--mode-baby); box-shadow: 0 0 8px color-mix(in srgb, var(--mode-baby) 70%, transparent); }
+  .switcher [data-mode-target='trends'][aria-selected='true'] .dot { background: var(--mode-trends); box-shadow: 0 0 8px color-mix(in srgb, var(--mode-trends) 70%, transparent); }
+  .switcher [data-mode-target='motion'][aria-selected='true'] .dot { background: var(--mode-motion); box-shadow: 0 0 8px color-mix(in srgb, var(--mode-motion) 70%, transparent); }
+
+  /* CTAs */
+  .cta-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .cta-primary {
+    display: inline-flex;
+    padding: 14px 28px;
+    border-radius: var(--radius-pill);
+    background: linear-gradient(var(--light-angle), var(--brand), var(--brand-deep));
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    box-shadow: var(--glass-highlight), var(--shadow-2);
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform var(--dur-micro) var(--ease-standard),
+      box-shadow var(--dur-micro) var(--ease-standard);
+  }
+
+  .cta-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--glass-highlight), var(--shadow-3);
+  }
+
+  .cta-ghost {
+    color: var(--text-mid);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color var(--dur-micro) var(--ease-standard);
+  }
+
+  .cta-ghost:hover {
+    color: var(--text-hi);
+  }
+
+  /* Stage */
+  .stage {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-5);
+    min-height: 560px;
+  }
+
+  .beam {
+    position: absolute;
+    left: 4%;
+    right: 4%;
+    top: 50%;
+    height: 1px;
+  }
+
+  .beam .layer {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity var(--dur-hero) var(--ease-standard);
+  }
+
+  .beam .layer[data-for='baby'] { background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--mode-baby) 55%, transparent) 30%, color-mix(in srgb, var(--mode-baby) 55%, transparent) 70%, transparent); }
+  .beam .layer[data-for='trends'] { background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--mode-trends) 55%, transparent) 30%, color-mix(in srgb, var(--mode-trends) 55%, transparent) 70%, transparent); }
+  .beam .layer[data-for='motion'] { background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--mode-motion) 55%, transparent) 30%, color-mix(in srgb, var(--mode-motion) 55%, transparent) 70%, transparent); }
+
+  [data-mode='baby'] .beam .layer[data-for='baby'],
+  [data-mode='trends'] .beam .layer[data-for='trends'],
+  [data-mode='motion'] .beam .layer[data-for='motion'] {
+    opacity: 0.5;
+  }
+
+  /* Input/result plates: static glass, tilted toward the key light */
+  .plate {
+    position: relative;
+    width: 190px;
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .plate.input {
+    transform: perspective(1200px) rotateY(7deg);
+  }
+
+  .plate.output {
+    transform: perspective(1200px) rotateY(-7deg);
+  }
+
+  .plate-media {
+    position: relative;
+    height: 150px;
+    border-radius: var(--radius-l);
+    background: linear-gradient(var(--light-angle), rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02));
+    border: 1px solid var(--glass-border-2);
+    box-shadow: var(--glass-highlight), var(--glass-shade), var(--shadow-2);
+    backdrop-filter: blur(var(--glass-blur-1)) saturate(140%);
+    -webkit-backdrop-filter: blur(var(--glass-blur-1)) saturate(140%);
+    overflow: hidden;
+  }
+
+  .plate-view {
+    display: grid;
+    place-items: center;
+    padding: var(--space-4);
+  }
+
+  .plate-view svg {
+    width: 78%;
+  }
+
+  .plate-label {
+    height: 2.9em;
+    text-align: center;
+    font-size: var(--type-label-size);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-low);
+  }
+
+  /* Plate artwork fills */
+  .soft { fill: rgba(255, 255, 255, 0.42); }
+  .soft.dim { fill: rgba(255, 255, 255, 0.26); }
+  .frame-glyph rect { stroke: rgba(255, 255, 255, 0.4); stroke-width: 2.5; }
+  .frame-glyph path { fill: rgba(255, 255, 255, 0.4); }
+  .lit { fill: color-mix(in srgb, var(--mode) 68%, #fff); transition: fill var(--dur-hero) var(--ease-standard); }
+  .lit.dim1 { opacity: 0.55; }
+  .lit.dim2 { opacity: 0.3; }
+  .frame-lit { stroke: color-mix(in srgb, var(--mode) 68%, #fff); stroke-width: 2.5; }
+  .trail-path { stroke: color-mix(in srgb, var(--mode) 50%, transparent); stroke-width: 1.5; stroke-dasharray: 4 6; }
+
+  /* Mobile / tablet */
+  @media (max-width: 899px) {
+    .hero {
+      min-height: 0;
+      padding: var(--space-6) 0 var(--space-7);
+    }
+
+    .inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+      text-align: center;
+    }
+
+    .pitch-swap {
+      margin-inline: auto;
+      min-height: 5.8em;
+    }
+
+    .headline-swap .swap-item {
+      inset-inline: 0;
+    }
+
+    .switcher {
+      width: 100%;
+      justify-content: stretch;
+    }
+
+    .switcher [role='tab'] {
+      flex: 1;
+      justify-content: center;
+      padding-inline: var(--space-2);
+    }
+
+    .cta-row {
+      justify-content: center;
+    }
+
+    .stage {
+      min-height: 0;
+      gap: var(--space-4);
+    }
+
+    /* Side plates collapse into compact chips beside the phone */
+    .plate {
+      width: 120px;
+    }
+
+    .plate-media {
+      height: 96px;
+    }
+
+    .plate.input,
+    .plate.output {
+      transform: none;
+    }
+  }
+
+  @media (max-width: 639px) {
+    .plate {
+      display: none;
+    }
+
+    .beam {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const hero = document.querySelector<HTMLElement>('.hero');
+  const tabs = Array.from(
+    hero?.querySelectorAll<HTMLButtonElement>('[role="tab"]') ?? [],
+  );
+  const panel = hero?.querySelector<HTMLElement>('#hero-panel');
+
+  function activate(tab: HTMLButtonElement, focus = false) {
+    const mode = tab.dataset.modeTarget;
+    if (!hero || !mode) return;
+    hero.dataset.mode = mode;
+    for (const t of tabs) {
+      const selected = t === tab;
+      t.setAttribute('aria-selected', String(selected));
+      t.tabIndex = selected ? 0 : -1;
+    }
+    panel?.setAttribute('aria-labelledby', tab.id);
+    if (focus) tab.focus();
+  }
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => activate(tab));
+    tab.addEventListener('keydown', (e) => {
+      const last = tabs.length - 1;
+      let next: number | null = null;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = i === last ? 0 : i + 1;
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = i === 0 ? last : i - 1;
+      else if (e.key === 'Home') next = 0;
+      else if (e.key === 'End') next = last;
+      if (next !== null) {
+        e.preventDefault();
+        activate(tabs[next], true);
+      }
+    });
+  });
+</script>

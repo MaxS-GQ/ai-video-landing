@@ -1,0 +1,82 @@
+---
+import { site, withBase } from '../data/site';
+import LiquidGlassSurface from './LiquidGlassSurface.astro';
+
+interface Props {
+  /** Compact band (home) or full page hero (/download). */
+  variant?: 'band' | 'page';
+}
+
+const { variant = 'band' } = Astro.props;
+---
+
+<LiquidGlassSurface level={2} class={`download-cta ${variant}`}>
+  <img src={withBase('/assets/favicon.png')} alt="" width="52" height="52" />
+  <h2>{site.name} for iPhone</h2>
+  <p>
+    {
+      site.appStoreUrl
+        ? 'Available now on the App Store.'
+        : 'Coming soon to the App Store. Write to us and we’ll let you know the moment it ships.'
+    }
+  </p>
+  {
+    site.appStoreUrl ? (
+      <a class="cta-primary" href={site.appStoreUrl}>Download on the App Store</a>
+    ) : (
+      <a class="cta-primary" href={`mailto:${site.contactEmail}?subject=Notify me about MOVA`}>
+        Get notified
+      </a>
+    )
+  }
+</LiquidGlassSurface>
+
+<style>
+  :global(.download-cta) {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-4);
+    text-align: center;
+    padding: var(--space-8) var(--space-5);
+  }
+
+  :global(.download-cta.page) {
+    padding-block: var(--space-9);
+  }
+
+  img {
+    border-radius: var(--radius-pill);
+    box-shadow: 0 0 24px color-mix(in srgb, var(--brand) 45%, transparent);
+  }
+
+  h2 {
+    font-size: var(--type-h2-size);
+    font-weight: 800;
+    letter-spacing: -0.015em;
+  }
+
+  p {
+    color: var(--text-mid);
+    max-width: 44ch;
+  }
+
+  .cta-primary {
+    display: inline-flex;
+    margin-top: var(--space-2);
+    padding: 14px 28px;
+    border-radius: var(--radius-pill);
+    background: linear-gradient(var(--light-angle), var(--brand), var(--brand-deep));
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    box-shadow: var(--glass-highlight), var(--shadow-2);
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform var(--dur-micro) var(--ease-standard),
+      box-shadow var(--dur-micro) var(--ease-standard);
+  }
+
+  .cta-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--glass-highlight), var(--shadow-3);
+  }
+</style>

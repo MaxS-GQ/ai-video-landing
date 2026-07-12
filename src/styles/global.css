@@ -1,0 +1,149 @@
+@import './tokens.css';
+
+/* Reset */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--type-body-size);
+  line-height: 1.6;
+  background: var(--bg-0);
+  color: var(--text-hi);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Single focus style across the site */
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+  border-radius: var(--radius-s);
+}
+
+::selection {
+  background: rgba(62, 141, 255, 0.35);
+}
+
+/* Layout utilities */
+.container {
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+.container-wide {
+  max-width: var(--container-wide);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+/* Liquid glass material levels (docs/MOVA_DESIGN.md §2).
+   Do not stack more than two levels; never inside transform-animated parents. */
+.glass-1,
+.glass-2,
+.glass-3 {
+  position: relative;
+  border-radius: var(--radius-l);
+}
+
+.glass-1 {
+  background: linear-gradient(var(--light-angle), rgba(255, 255, 255, 0.02), transparent 45%),
+    var(--glass-fill-1);
+  border: 1px solid var(--glass-border-1);
+  box-shadow: var(--glass-highlight), var(--glass-shade), var(--shadow-1);
+  backdrop-filter: blur(var(--glass-blur-1)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--glass-blur-1)) saturate(140%);
+}
+
+.glass-2 {
+  background: linear-gradient(var(--light-angle), rgba(255, 255, 255, 0.035), transparent 45%),
+    var(--glass-fill-2);
+  border: 1px solid var(--glass-border-2);
+  box-shadow: var(--glass-highlight), var(--glass-shade), var(--shadow-2);
+  backdrop-filter: blur(var(--glass-blur-2)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--glass-blur-2)) saturate(140%);
+}
+
+.glass-3 {
+  background: linear-gradient(var(--light-angle), rgba(255, 255, 255, 0.05), transparent 45%),
+    var(--glass-fill-3);
+  border: 1px solid var(--glass-border-3);
+  box-shadow: var(--glass-highlight), var(--glass-shade), var(--shadow-3);
+  backdrop-filter: blur(var(--glass-blur-3)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--glass-blur-3)) saturate(140%);
+}
+
+/* Typography helpers */
+.type-label {
+  font-size: var(--type-label-size);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-low);
+}
+
+/* Screen-reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--space-4);
+  top: calc(-1 * var(--space-10));
+  z-index: var(--z-toast);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-s);
+  background: var(--bg-2);
+  color: var(--text-hi);
+  text-decoration: none;
+  transition: top var(--dur-ui) var(--ease-standard);
+}
+
+.skip-link:focus-visible {
+  top: var(--space-4);
+}

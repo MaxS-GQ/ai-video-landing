@@ -1,0 +1,93 @@
+/* MOVA design tokens — canonical values live in docs/MOVA_DESIGN.md §4.
+   Components must consume these variables; no ad-hoc magic values. */
+
+:root {
+  /* Surfaces & text */
+  --bg-0: #07090d;
+  --bg-1: #0b0e15;
+  --bg-2: #111520;
+  --text-hi: #f4f6fa;
+  --text-mid: rgba(232, 238, 248, 0.64);
+  --text-low: rgba(232, 238, 248, 0.42);
+
+  /* Brand & mode light temperatures */
+  --brand: #3e8dff;
+  --brand-deep: #1257c9;
+  --mode-motion: #4d9fff;
+  --mode-baby: #f2a48e;
+  --mode-trends: #e8b45c;
+
+  /* Liquid glass material */
+  --glass-fill-1: rgba(255, 255, 255, 0.045);
+  --glass-fill-2: rgba(255, 255, 255, 0.07);
+  --glass-fill-3: rgba(255, 255, 255, 0.1);
+  --glass-blur-1: 12px;
+  --glass-blur-2: 18px;
+  --glass-blur-3: 26px;
+  --glass-border-1: rgba(255, 255, 255, 0.1);
+  --glass-border-2: rgba(255, 255, 255, 0.14);
+  --glass-border-3: rgba(255, 255, 255, 0.18);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.13);
+  --glass-shade: inset 0 -12px 24px -16px rgba(0, 0, 0, 0.5);
+  --shadow-1: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --shadow-2: 0 12px 40px rgba(0, 0, 0, 0.45);
+  --shadow-3: 0 24px 80px rgba(0, 0, 0, 0.55);
+  --light-angle: 150deg; /* single global key light, top-right */
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif;
+  --type-display-size: clamp(44px, 6.5vw, 82px);
+  --type-h1-size: clamp(34px, 4.5vw, 56px);
+  --type-h2-size: clamp(26px, 3vw, 38px);
+  --type-h3-size: 21px;
+  --type-body-size: 17px;
+  --type-small-size: 14.5px;
+  --type-label-size: 12px;
+
+  /* Space & shape */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+  --radius-s: 10px;
+  --radius-m: 16px;
+  --radius-l: 24px;
+  --radius-xl: 32px;
+  --radius-pill: 999px;
+  --container: 1160px;
+  --container-wide: 1400px;
+  --container-prose: 720px;
+
+  /* Motion */
+  --dur-micro: 120ms;
+  --dur-ui: 240ms;
+  --dur-scene: 480ms;
+  --dur-hero: 800ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.7, 0, 0.84, 0);
+
+  /* Layers */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-header: 100;
+  --z-overlay: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-micro: 1ms;
+    --dur-ui: 1ms;
+    --dur-scene: 1ms;
+    --dur-hero: 1ms;
+  }
+}

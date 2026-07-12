@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DownloadCTA from '../components/DownloadCTA.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout
+  title={`Download ${site.name} for iPhone`}
+  description={`Get ${site.name} — turn your photos into personalized AI video and imagery. iOS, coming soon to the App Store.`}
+>
+  <section class="page">
+    <div class="container narrow">
+      <DownloadCTA variant="page" />
+      <p class="note">
+        {site.name} runs on iPhone (iOS 26+). Android is on the roadmap — the same email
+        works if you want to hear about it.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page {
+    padding: var(--space-8) 0;
+  }
+
+  .narrow {
+    max-width: var(--container-prose);
+  }
+
+  .note {
+    margin-top: var(--space-5);
+    text-align: center;
+    font-size: var(--type-small-size);
+    color: var(--text-low);
+  }
+</style>

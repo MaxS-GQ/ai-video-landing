@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroExperience from '../components/HeroExperience.astro';
+import DownloadCTA from '../components/DownloadCTA.astro';
+import { site } from '../data/site';
+import { differentiators } from '../data/features';
+---
+
+<BaseLayout
+  title={`${site.name} — Motion. Opportunity. Visual AI.`}
+  description={site.description}
+  structuredData
+>
+  <HeroExperience />
+
+  <section id="why" class="why" aria-labelledby="why-title">
+    <div class="container">
+      <p class="type-label">Why MOVA</p>
+      <h2 id="why-title">Not another AI&nbsp;generator</h2>
+
+      <ol class="statements">
+        {
+          differentiators.map((d, i) => (
+            <li style={`--i: ${i}`}>
+              <span class="index" aria-hidden="true">0{i + 1}</span>
+              <div>
+                <h3>{d.title}</h3>
+                <p>{d.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="download" aria-label="Download MOVA">
+    <div class="container">
+      <DownloadCTA />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .why {
+    padding: var(--space-9) 0 var(--space-8);
+  }
+
+  .why .type-label {
+    margin-bottom: var(--space-3);
+  }
+
+  .why h2 {
+    font-size: var(--type-h2-size);
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    margin-bottom: var(--space-7);
+    max-width: 14ch;
+  }
+
+  /* Deliberately not a card grid: an offset numbered ledger
+     (docs/MOVA_DESIGN.md §3 — no identical cards per block) */
+  .statements {
+    list-style: none;
+    display: grid;
+    gap: var(--space-6);
+    max-width: 780px;
+  }
+
+  .statements li {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: var(--space-5);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--glass-border-1);
+    margin-left: calc(var(--i) * var(--space-8));
+  }
+
+  .index {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--text-low);
+  }
+
+  .statements h3 {
+    font-size: var(--type-h3-size);
+    font-weight: 700;
+    margin-bottom: var(--space-2);
+  }
+
+  .statements p {
+    color: var(--text-mid);
+    max-width: 52ch;
+  }
+
+  .download {
+    padding-bottom: var(--space-6);
+  }
+
+  @media (max-width: 899px) {
+    .why {
+      padding-top: var(--space-8);
+    }
+
+    .statements li {
+      margin-left: 0;
+      grid-template-columns: 48px 1fr;
+      gap: var(--space-4);
+    }
+  }
+</style>

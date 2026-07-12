@@ -1,0 +1,118 @@
+---
+import { primaryNav, legalNav, downloadCta } from '../data/navigation';
+import { site, withBase } from '../data/site';
+---
+
+<footer class="site-footer">
+  <div class="container grid">
+    <div class="brand-col">
+      <a class="brand" href={withBase('/')}>
+        <img src={withBase('/assets/favicon.png')} alt="" width="28" height="28" />
+        <span>{site.name}</span>
+      </a>
+      <p>{site.wordmark}</p>
+    </div>
+
+    <nav aria-label="Footer">
+      <h2 class="type-label">Explore</h2>
+      <ul>
+        {
+          primaryNav.map((item) =>
+            item.status === 'live' ? (
+              <li>
+                <a href={withBase(item.href)}>{item.label}</a>
+              </li>
+            ) : (
+              <li>
+                <span class="soon">{item.label} — soon</span>
+              </li>
+            ),
+          )
+        }
+        <li><a href={withBase(downloadCta.href)}>{downloadCta.label}</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <h2 class="type-label">Contact</h2>
+      <ul>
+        <li><a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a></li>
+        {legalNav.map((item) => <li><span class="soon">{item.label} — soon</span></li>)}
+      </ul>
+    </div>
+  </div>
+
+  <div class="container bottom">
+    <span>© {site.year} {site.name}. All rights reserved.</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-9);
+    border-top: 1px solid var(--glass-border-1);
+    background: var(--bg-1);
+    padding: var(--space-8) 0 var(--space-6);
+    font-size: var(--type-small-size);
+    color: var(--text-mid);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.4fr;
+    gap: var(--space-7);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    color: var(--text-hi);
+    text-decoration: none;
+    margin-bottom: var(--space-3);
+  }
+
+  .brand img {
+    border-radius: var(--radius-pill);
+  }
+
+  h2 {
+    margin-bottom: var(--space-4);
+  }
+
+  ul {
+    list-style: none;
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  a {
+    color: var(--text-mid);
+    text-decoration: none;
+    transition: color var(--dur-micro) var(--ease-standard);
+  }
+
+  a:hover {
+    color: var(--text-hi);
+  }
+
+  .soon {
+    color: var(--text-low);
+  }
+
+  .bottom {
+    margin-top: var(--space-7);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--glass-border-1);
+    color: var(--text-low);
+  }
+
+  @media (max-width: 899px) {
+    .grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+  }
+</style>

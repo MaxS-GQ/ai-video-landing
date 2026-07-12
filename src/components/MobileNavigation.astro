@@ -1,0 +1,168 @@
+---
+import { primaryNav, downloadCta } from '../data/navigation';
+import { withBase } from '../data/site';
+---
+
+<div class="mobile-nav">
+  <button
+    class="toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="mobile-menu"
+    aria-label="Open menu"
+  >
+    <span class="line"></span>
+    <span class="line"></span>
+  </button>
+
+  <div class="sheet glass-3" id="mobile-menu" hidden>
+    <nav aria-label="Mobile">
+      <ul>
+        {
+          primaryNav.map((item) =>
+            item.status === 'live' ? (
+              <li>
+                <a href={withBase(item.href)}>{item.label}</a>
+              </li>
+            ) : (
+              <li>
+                <span class="soon" aria-disabled="true">
+                  {item.label} <sup>soon</sup>
+                </span>
+              </li>
+            ),
+          )
+        }
+        <li class="cta-row">
+          <a class="cta" href={withBase(downloadCta.href)}>{downloadCta.label}</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<style>
+  .mobile-nav {
+    display: none;
+  }
+
+  @media (max-width: 899px) {
+    .mobile-nav {
+      display: block;
+    }
+  }
+
+  .toggle {
+    display: grid;
+    gap: 5px;
+    place-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-s);
+  }
+
+  .toggle .line {
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--text-hi);
+    transition: transform var(--dur-ui) var(--ease-standard);
+  }
+
+  .toggle[aria-expanded='true'] .line:first-child {
+    transform: translateY(3.5px) rotate(45deg);
+  }
+
+  .toggle[aria-expanded='true'] .line:last-child {
+    transform: translateY(-3.5px) rotate(-45deg);
+  }
+
+  .sheet {
+    position: fixed;
+    top: 72px;
+    right: var(--space-4);
+    left: var(--space-4);
+    z-index: var(--z-overlay);
+    padding: var(--space-5);
+    transform-origin: top right;
+    animation: sheet-in var(--dur-ui) var(--ease-enter);
+  }
+
+  @keyframes sheet-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px) scale(0.98);
+    }
+  }
+
+  .sheet ul {
+    list-style: none;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .sheet a:not(.cta),
+  .sheet .soon {
+    font-size: 17px;
+    text-decoration: none;
+    color: var(--text-hi);
+  }
+
+  .sheet .soon {
+    color: var(--text-low);
+  }
+
+  .sheet .soon sup {
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .cta-row {
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--glass-border-1);
+  }
+
+  .cta {
+    display: inline-flex;
+    padding: 10px 22px;
+    border-radius: var(--radius-pill);
+    background: linear-gradient(var(--light-angle), var(--brand), var(--brand-deep));
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: var(--glass-highlight), var(--shadow-1);
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('.mobile-nav');
+  const toggle = root?.querySelector<HTMLButtonElement>('.toggle');
+  const sheet = root?.querySelector<HTMLElement>('.sheet');
+
+  if (root && toggle && sheet) {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      sheet.hidden = !open;
+    };
+
+    toggle.addEventListener('click', () => {
+      setOpen(sheet.hidden);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !sheet.hidden) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!sheet.hidden && e.target instanceof Node && !root.contains(e.target)) {
+        setOpen(false);
+      }
+    });
+  }
+</script>

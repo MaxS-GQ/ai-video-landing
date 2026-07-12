@@ -1,0 +1,333 @@
+---
+/** CSS reconstruction of the MOVA app screen, one view per scenario.
+    Placeholder graphics are abstract SVG silhouettes — to be replaced with real
+    app screenshots (docs/MOVA_MEDIA_REQUIREMENTS.md #12). The active view is
+    driven by `data-mode` on the hero root; no backdrop-filter inside (the shell
+    floats via transform — see MOVA_DESIGN.md §2 performance rule).
+    Sizes below are the phone's own design grid, not site tokens. */
+import { features } from '../data/features';
+import { site, withBase } from '../data/site';
+---
+
+<div class="phone" aria-hidden="true">
+  <div class="screen">
+    <div class="app-bar">
+      <span class="app-brand">
+        <img src={withBase('/assets/favicon.png')} alt="" width="18" height="18" />
+        {site.name}
+      </span>
+      <span class="credits">120 cr</span>
+    </div>
+
+    {
+      features.map((f) => (
+        <div class="view" data-for={f.id}>
+          <span class="view-title">{f.name}</span>
+
+          {f.id === 'baby' && (
+            <div class="baby-view">
+              <div class="sources">
+                <span class="slot">
+                  <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="34" r="17" />
+                    <path d="M16 86 C16 65 31 57 50 57 C69 57 84 65 84 86 Z" />
+                  </svg>
+                </span>
+                <span class="plus">+</span>
+                <span class="slot">
+                  <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="34" r="17" />
+                    <path d="M16 86 C16 65 31 57 50 57 C69 57 84 65 84 86 Z" />
+                  </svg>
+                </span>
+              </div>
+              <div class="result">
+                <svg viewBox="0 0 100 100">
+                  <circle cx="50" cy="38" r="22" />
+                  <path d="M22 88 C22 70 35 63 50 63 C65 63 78 70 78 88 Z" />
+                </svg>
+              </div>
+              <span class="action">Generate · 8 cr</span>
+            </div>
+          )}
+
+          {f.id === 'trends' && (
+            <div class="trends-view">
+              <div class="tile active">
+                <svg viewBox="0 0 100 100"><circle cx="50" cy="42" r="24" /></svg>
+              </div>
+              <div class="tile">
+                <svg viewBox="0 0 100 100"><path d="M10 80 Q50 20 90 80 Z" /></svg>
+              </div>
+              <div class="tile">
+                <svg viewBox="0 0 100 100"><rect x="24" y="24" width="52" height="52" rx="12" /></svg>
+              </div>
+              <div class="tile">
+                <svg viewBox="0 0 100 100"><path d="M20 78 Q35 30 50 60 Q65 90 80 30" fill="none" stroke-width="10" /></svg>
+              </div>
+              <span class="action">Generate · 12 cr</span>
+            </div>
+          )}
+
+          {f.id === 'motion' && (
+            <div class="motion-view">
+              <div class="frame">
+                <svg class="trail" viewBox="0 0 160 120">
+                  <path class="path" d="M14 96 C46 40 84 32 146 58" fill="none" />
+                  <g class="ghost g1">
+                    <circle cx="30" cy="78" r="9" />
+                    <path d="M18 108 C18 96 24 90 30 90 C36 90 42 96 42 108 Z" />
+                  </g>
+                  <g class="ghost g2">
+                    <circle cx="76" cy="58" r="10" />
+                    <path d="M62 92 C62 78 68 71 76 71 C84 71 90 78 90 92 Z" />
+                  </g>
+                  <g class="ghost g3">
+                    <circle cx="126" cy="56" r="11" />
+                    <path d="M110 94 C110 78 117 70 126 70 C135 70 142 78 142 94 Z" />
+                  </g>
+                </svg>
+              </div>
+              <div class="timeline">
+                <span class="playhead"></span>
+              </div>
+              <span class="action">Generate · 10 cr</span>
+            </div>
+          )}
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .phone {
+    width: 264px;
+    height: 546px;
+    padding: 9px;
+    border-radius: 44px;
+    background: linear-gradient(var(--light-angle), #171c26, #0a0d13);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow:
+      inset 0 0 0 3px #05070b,
+      var(--shadow-3);
+  }
+
+  .screen {
+    position: relative;
+    height: 100%;
+    border-radius: 36px;
+    overflow: hidden;
+    background:
+      radial-gradient(200px 170px at 82% 0%, color-mix(in srgb, var(--mode, var(--brand)) 22%, transparent), transparent 65%),
+      var(--bg-2);
+    display: flex;
+    flex-direction: column;
+    transition: background var(--dur-hero) var(--ease-standard);
+  }
+
+  .app-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 16px 10px;
+  }
+
+  .app-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+  }
+
+  .app-brand img {
+    border-radius: var(--radius-pill);
+  }
+
+  .credits {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: color-mix(in srgb, var(--mode, var(--brand)) 70%, #fff);
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    border: 1px solid color-mix(in srgb, var(--mode, var(--brand)) 45%, transparent);
+    transition: color var(--dur-hero) var(--ease-standard),
+      border-color var(--dur-hero) var(--ease-standard);
+  }
+
+  /* Stacked views crossfade on mode change */
+  .view {
+    position: absolute;
+    inset: 52px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+    transition:
+      opacity var(--dur-scene) var(--ease-standard),
+      transform var(--dur-scene) var(--ease-enter);
+    pointer-events: none;
+  }
+
+  :global([data-mode='baby']) .view[data-for='baby'],
+  :global([data-mode='trends']) .view[data-for='trends'],
+  :global([data-mode='motion']) .view[data-for='motion'] {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--dur-scene) * 0.35);
+  }
+
+  .view-title {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  .action {
+    margin-top: auto;
+    align-self: center;
+    white-space: nowrap;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 8px 18px;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.09);
+  }
+
+  svg {
+    fill: rgba(255, 255, 255, 0.5);
+  }
+
+  /* Future Baby */
+  .baby-view {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .sources {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .slot {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+    background: linear-gradient(var(--light-angle), color-mix(in srgb, var(--mode-baby) 34%, var(--bg-2)), var(--bg-2));
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 8px;
+  }
+
+  .plus {
+    color: var(--text-low);
+    font-size: 14px;
+  }
+
+  .result {
+    flex: 1;
+    border-radius: var(--radius-m);
+    background: linear-gradient(var(--light-angle), color-mix(in srgb, var(--mode-baby) 26%, var(--bg-2)), var(--bg-2));
+    border: 1px solid color-mix(in srgb, var(--mode-baby) 40%, transparent);
+    display: grid;
+    place-items: center;
+    padding: 18px;
+  }
+
+  .result svg {
+    width: 92px;
+    fill: color-mix(in srgb, var(--mode-baby) 65%, #fff);
+  }
+
+  /* Trends */
+  .trends-view {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 108px;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .tile {
+    border-radius: var(--radius-m);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    display: grid;
+    place-items: center;
+    padding: 20px;
+  }
+
+  .tile:nth-child(1) { background: linear-gradient(var(--light-angle), color-mix(in srgb, var(--mode-trends) 38%, var(--bg-2)), var(--bg-2)); }
+  .tile:nth-child(2) { background: linear-gradient(var(--light-angle), color-mix(in srgb, var(--mode-motion) 26%, var(--bg-2)), var(--bg-2)); }
+  .tile:nth-child(3) { background: linear-gradient(var(--light-angle), color-mix(in srgb, var(--mode-baby) 24%, var(--bg-2)), var(--bg-2)); }
+  .tile:nth-child(4) { background: linear-gradient(var(--light-angle), rgba(255, 255, 255, 0.1), var(--bg-2)); }
+
+  .tile svg {
+    width: 44px;
+    fill: rgba(255, 255, 255, 0.45);
+    stroke: rgba(255, 255, 255, 0.45);
+  }
+
+  .tile.active {
+    border-color: color-mix(in srgb, var(--mode-trends) 70%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--mode-trends) 45%, transparent);
+  }
+
+  /* Motion Control */
+  .motion-view {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .frame {
+    flex: 1;
+    border-radius: var(--radius-m);
+    border: 1px solid color-mix(in srgb, var(--mode-motion) 40%, transparent);
+    background: linear-gradient(var(--light-angle), color-mix(in srgb, var(--mode-motion) 20%, var(--bg-2)), var(--bg-2));
+    display: grid;
+    place-items: center;
+    padding: 14px;
+  }
+
+  .trail .path {
+    stroke: color-mix(in srgb, var(--mode-motion) 60%, transparent);
+    stroke-width: 1.5;
+    stroke-dasharray: 4 6;
+  }
+
+  .ghost circle,
+  .ghost path {
+    fill: color-mix(in srgb, var(--mode-motion) 70%, #fff);
+  }
+
+  .ghost.g1 { opacity: 0.25; }
+  .ghost.g2 { opacity: 0.5; }
+  .ghost.g3 { opacity: 0.95; }
+
+  .timeline {
+    position: relative;
+    height: 4px;
+    border-radius: var(--radius-pill);
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  .timeline .playhead {
+    position: absolute;
+    top: -4px;
+    left: 62%;
+    width: 12px;
+    height: 12px;
+    border-radius: var(--radius-pill);
+    background: var(--mode-motion);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--mode-motion) 60%, transparent);
+  }
+</style>

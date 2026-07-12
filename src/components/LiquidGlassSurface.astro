@@ -1,0 +1,14 @@
+---
+/** Liquid glass material wrapper (docs/MOVA_DESIGN.md §2).
+    Levels: 1 resting · 2 raised · 3 overlay. */
+interface Props {
+  level?: 1 | 2 | 3;
+  class?: string;
+}
+
+const { level = 1, class: className = '' } = Astro.props;
+---
+
+<div class:list={[`glass-${level}`, className]}>
+  <slot />
+</div>

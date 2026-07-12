@@ -1,0 +1,166 @@
+---
+import { primaryNav, downloadCta } from '../data/navigation';
+import { site, withBase } from '../data/site';
+import MobileNavigation from './MobileNavigation.astro';
+---
+
+<header class="site-header" data-scrolled="false">
+  <div class="container bar">
+    <a class="brand" href={withBase('/')} aria-label={`${site.name} — home`}>
+      <img src={withBase('/assets/favicon.png')} alt="" width="34" height="34" />
+      <span>{site.name}</span>
+    </a>
+
+    <nav class="primary" aria-label="Primary">
+      <ul>
+        {
+          primaryNav.map((item) =>
+            item.status === 'live' ? (
+              <li>
+                <a
+                  href={withBase(item.href)}
+                  aria-current={Astro.url.pathname.startsWith(withBase(item.href)) ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ) : (
+              <li>
+                <span class="soon-item" aria-disabled="true">
+                  {item.label}
+                  <sup>soon</sup>
+                </span>
+              </li>
+            ),
+          )
+        }
+      </ul>
+    </nav>
+
+    <div class="actions">
+      <a class="cta" href={withBase(downloadCta.href)}>{downloadCta.label}</a>
+      <MobileNavigation />
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    transition:
+      background-color var(--dur-ui) var(--ease-standard),
+      border-color var(--dur-ui) var(--ease-standard),
+      backdrop-filter var(--dur-ui) var(--ease-standard);
+    border-bottom: 1px solid transparent;
+  }
+
+  /* Header material rises to glass-2 once the page scrolls */
+  .site-header[data-scrolled='true'] {
+    background: linear-gradient(var(--light-angle), rgba(255, 255, 255, 0.03), transparent 45%),
+      rgba(7, 9, 13, 0.72);
+    border-bottom-color: var(--glass-border-1);
+    backdrop-filter: blur(var(--glass-blur-2)) saturate(140%);
+    -webkit-backdrop-filter: blur(var(--glass-blur-2)) saturate(140%);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    height: 64px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 0.16em;
+    text-decoration: none;
+  }
+
+  .brand img {
+    border-radius: var(--radius-pill);
+  }
+
+  .primary ul {
+    display: flex;
+    gap: var(--space-6);
+    list-style: none;
+  }
+
+  .primary a,
+  .soon-item {
+    font-size: var(--type-small-size);
+    color: var(--text-mid);
+    text-decoration: none;
+  }
+
+  .primary a {
+    transition: color var(--dur-micro) var(--ease-standard);
+  }
+
+  .primary a:hover,
+  .primary a[aria-current='page'] {
+    color: var(--text-hi);
+  }
+
+  .soon-item {
+    color: var(--text-low);
+    cursor: default;
+  }
+
+  .soon-item sup {
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-left: var(--space-1);
+    color: var(--text-low);
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 20px;
+    border-radius: var(--radius-pill);
+    background: linear-gradient(var(--light-angle), var(--brand), var(--brand-deep));
+    box-shadow: var(--glass-highlight), var(--shadow-1);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    font-weight: 600;
+    font-size: var(--type-small-size);
+    text-decoration: none;
+    transition: transform var(--dur-micro) var(--ease-standard),
+      box-shadow var(--dur-micro) var(--ease-standard);
+  }
+
+  .cta:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--glass-highlight), var(--shadow-2);
+  }
+
+  @media (max-width: 899px) {
+    .primary {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('.site-header');
+  if (header) {
+    const update = () => header.setAttribute('data-scrolled', String(window.scrollY > 8));
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+  }
+</script>
